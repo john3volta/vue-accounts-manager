@@ -59,11 +59,21 @@ const shouldShowError = ref(false)
 const hasBeenTouched = ref(false)
 
 const schema = yup.object({
-  [props.fieldName]: yup.string().required(`${props.label} обязателен`).max(100, 'Максимум 100 символов')
+  [props.fieldName]: yup.string()
+    .required(`${props.label} обязателен`)
+    .max(100, 'Максимум 100 символов')
+    .test('no-spaces', 'Пробелы не допускаются', function(value) {
+      if (props.fieldName === 'login' && value && value.includes(' ')) {
+        return false
+      }
+      return true
+    })
 })
 
 const handleInput = (value: string) => {
-  emit('update:model-value', value)
+  const processedValue = props.fieldName === 'login' ? value.replace(/\s/g, '') : value
+  
+  emit('update:model-value', processedValue)
   
   hasBeenTouched.value = true
   
