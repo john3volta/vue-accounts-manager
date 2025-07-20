@@ -51,22 +51,20 @@ import ValidatedInput from './ValidatedInput.vue'
 import DeleteButton from './DeleteButton.vue'
 import SaveButton from './SaveButton.vue'
 
-interface Account {
-  id: string
-  parsedLabels: Array<{ text: string }>
-  recordType: string
-  login: string
-  password: string
-  isSaved: boolean
-}
-
 const props = defineProps<{
-  account: Account
+  account: {
+    id: string
+    parsedLabels: Array<{ text: string }>
+    recordType: string
+    login: string
+    password: string
+    isSaved: boolean
+  }
 }>()
 
 const emit = defineEmits<{
-  'update:account': [account: Account]
-  'save': [account: Account]
+  'update:account': [account: typeof props.account]
+  'save': [account: typeof props.account]
   delete: []
 }>()
 
@@ -91,7 +89,7 @@ const labelsString = computed(() => {
   return props.account.parsedLabels.map(label => label.text).join('; ')
 })
 
-const updateField = (field: keyof Account, value: any) => {
+const updateField = (field: keyof typeof props.account, value: any) => {
   emit('update:account', { 
     ...props.account, 
     [field]: value, 
