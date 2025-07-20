@@ -43,7 +43,7 @@
           :key="account.id"
           :account="account"
           @update:account="updateAccount(index, $event)"
-          @save="(account) => saveAccount(index, account)"
+          @save="(account) => handleSaveAccount(index, account)"
           @delete="deleteAccount(index)"
         />
       </v-container>
@@ -52,51 +52,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { useAccountsStore } from '../stores/accounts'
 import AccountRow from './AccountRow.vue'
 
-interface Account {
-  id: string
-  parsedLabels: Array<{ text: string }>
-  recordType: string
-  login: string
-  password: string
-  isSaved: boolean
-}
+const store = useAccountsStore()
 
-const accounts = ref<Account[]>([])
+const { accounts, addAccount, updateAccount, deleteAccount, saveAccount } = store
 
-const hasUnsavedAccounts = computed(() => 
-  accounts.value.some(acc => !acc.isSaved)
-)
-
-const addAccount = () => {
-  if (!hasUnsavedAccounts.value) {
-    accounts.value.push({
-      id: Date.now().toString(),
-      parsedLabels: [],
-      recordType: 'Локальная',
-      login: '',
-      password: '',
-      isSaved: false
-    })
-  }
-}
-
-const updateAccount = (index: number, updatedAccount: Account) => {
-  accounts.value[index] = updatedAccount
-}
-
-const deleteAccount = (index: number) => {
-  accounts.value.splice(index, 1)
-}
-
-const saveAccount = (index: number, account: Account) => {
-  accounts.value[index] = {
-    ...account,
-    isSaved: true
-  }
-  console.log('Аккаунт сохранен:', account.login)
+const handleSaveAccount = (index: number, account: any) => {
+  const result = saveAccount(index, account)
+  alert(result.message)
 }
 </script>
 
