@@ -1,21 +1,36 @@
 <template>
   <v-text-field
     :model-value="modelValue"
-    @update:model-value="$emit('update:model-value', $event)"
+    @update:model-value="handleInput"
     placeholder="Введите метки"
     maxlength="50"
     variant="outlined"
     density="compact"
-    hide-details
+    :error="hasError"
+    :error-messages="errorMessage"
   />
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import { computed } from 'vue'
+
+const props = defineProps<{
   modelValue: string
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
   'update:model-value': [value: string]
 }>()
+
+const hasError = computed(() => {
+  return props.modelValue.length >= 50
+})
+
+const errorMessage = computed(() => {
+  return hasError.value ? 'Максимум 50 символов' : ''
+})
+
+const handleInput = (value: string) => {
+  emit('update:model-value', value)
+}
 </script>
