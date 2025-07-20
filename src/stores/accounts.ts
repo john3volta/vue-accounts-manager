@@ -23,7 +23,6 @@ export const useAccountsStore = defineStore('accounts', () => {
         accounts.value = JSON.parse(stored)
       }
     } catch (error) {
-      console.error('Ошибка загрузки аккаунтов:', error)
     }
   }
 
@@ -31,7 +30,6 @@ export const useAccountsStore = defineStore('accounts', () => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts.value))
     } catch (error) {
-      console.error('Ошибка сохранения аккаунтов:', error)
     }
   }
 
@@ -67,7 +65,6 @@ export const useAccountsStore = defineStore('accounts', () => {
     )
     
     if (existingIndex !== -1) {
-      console.error('Аккаунт с таким логином уже существует:', account.login)
       return { success: false, message: 'Аккаунт с таким логином уже существует' }
     }
     
@@ -76,7 +73,6 @@ export const useAccountsStore = defineStore('accounts', () => {
       isSaved: true
     }
     saveToStorage()
-    console.log('Аккаунт сохранен:', account.login)
     return { success: true, message: 'Аккаунт успешно сохранен' }
   }
 

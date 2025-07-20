@@ -128,10 +128,7 @@ const saveAccount = () => {
   const passwordIsValid = isLocalAccount ? passwordValid.value : true
   
   if (loginIsValid && passwordIsValid) {
-    console.log('Сохраняем аккаунт:', props.account)
     emit('save', props.account)
-  } else {
-    console.log('Валидация не пройдена')
   }
 }
 </script>
